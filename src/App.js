@@ -12,22 +12,10 @@ import User from './components/users/User';
 
 const App =()=> {
  
-  const [users,setUsers] = useState([]);
   const [loading,setLoading] = useState(false);
   const [alert,setAlert] = useState(null);
-  const [user,setUser] = useState({});
   const [repos,setRepos] = useState([]);
 
- const searchUsers = async text => {
-    setLoading({ loading: true });
-    const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-   setUsers(res.data.items);
-   setLoading(false);
-  };
 
  const getUserRepos = async username => {
     setLoading(true);
@@ -39,23 +27,7 @@ const App =()=> {
     setRepos(res.data);
     setLoading(false);
   };
-  const getUser = async username => {
-    setLoading(true);
-    const res = await axios.get(
-      `https://api.github.com/users/${username}?client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-    setUser(res.data);
-    setLoading(false);
-    
-  };
-
- const clearUsers = () => {
   
-    setUsers([]);
-    setLoading(false);
-  };
 
   const setAlertFunc = (msg, type) => {
     setAlert({msg,type});
@@ -77,13 +49,11 @@ const App =()=> {
                 render={props => (
                   <Fragment>
                     <Search
-                      searchUsers={searchUsers}
-                      clearUsers={clearUsers}
-                      showClear={users.length > 0 ? true : false}
+                     
                       setAlert={setAlertFunc}
                     />
 
-                    <Users loading={loading} users={users} />
+                    <Users />
                   </Fragment>
                 )}
               />
@@ -94,10 +64,8 @@ const App =()=> {
                 render={props => (
                   <User
                     {...props}
-                    getUser={getUser}
                     getUserRepos={getUserRepos}
                     repos={repos}
-                    user={user}
                     loading={loading}
                   />
                 )}
