@@ -1,7 +1,8 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import GithubState from './context/github/GithubState';
+import AlertState from './context/alert/AlertState';
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
@@ -11,18 +12,10 @@ import User from './components/users/User';
 
 const App =()=> {
  
- 
-  const [alert,setAlert] = useState(null);
-
-
-  const setAlertFunc = (msg, type) => {
-    setAlert({msg,type});
-    setTimeout(()=>setAlert(null),5000);
-  };
-
 
     return (
       <GithubState>
+      <AlertState>
       <Router>
         <div className='App'>
           <Navbar />
@@ -34,11 +27,7 @@ const App =()=> {
                 path='/'
                 render={props => (
                   <Fragment>
-                    <Search
-                     
-                      setAlert={setAlertFunc}
-                    />
-
+                    <Search />
                     <Users />
                   </Fragment>
                 )}
@@ -53,6 +42,7 @@ const App =()=> {
           </div>
         </div>
       </Router>
+      </AlertState>
       </GithubState>
     );
   }
